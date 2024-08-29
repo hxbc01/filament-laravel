@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Pegawai extends Model
 {
@@ -34,5 +37,19 @@ class Pegawai extends Model
         'bup',
         'tmtbup',
     ];
+
+    public function anaks(): HasMany
+    {
+        return $this->hasMany(Anak::class, 'nip', 'nip');
+    }
+
+    public function pasangan(): HasOne
+    {
+        return $this->hasOne(Sutri::class, 'nip', 'nip');
+    }
+
+    public function unitkerja(): BelongsTo {
+        return $this->belongsTo(Unitkerja::class, 'unker','kode_unker');
+    }
 
 }
