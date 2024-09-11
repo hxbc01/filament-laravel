@@ -18,6 +18,7 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Split;
 use Filament\Forms\Components\Textarea;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\Filter;
@@ -224,7 +225,8 @@ class PegawaiResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\PasanganRelationManager::class,
+            RelationManagers\AnaksRelationManager::class,
         ];
     }
 
