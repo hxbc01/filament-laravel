@@ -18,7 +18,7 @@ class PasanganRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama')
+                Forms\Components\TextInput::make('nama_pasangan')
                     ->required()
                     ->maxLength(255),
             ]);
@@ -27,9 +27,11 @@ class PasanganRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('nama')
+            ->recordTitleAttribute('nama_pasangan')
             ->columns([
-                Tables\Columns\TextColumn::make('nama'),
+                Tables\Columns\TextColumn::make('nama_pasangan'),
+                Tables\Columns\TextColumn::make('status_pernikahan'),
+                Tables\Columns\TextColumn::make('tanggal_nikah'),
             ])
             ->filters([
                 //

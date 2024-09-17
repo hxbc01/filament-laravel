@@ -10,19 +10,21 @@ class Sutri extends Model
 {
     use HasFactory;
 
-    protected $table = 'sutri';
+    protected $table = 'pasangan_pegawai';
     protected $primaryKey = 'id';
-    // public $timestamps = false;
+    public $timestamps = false;
     // protected $guarded = ['id'];
     protected $fillable = [
         'nip',
-        'nama',
-        'tgl_lhr',
-        'status'
+        'nama_pasangan',
+        'tempat_lahir',
+        'tanggal_lahir',
+        'status_pernikahan',
+        'id_pegawai'
     ];
 
     public function pegawai(): BelongsTo
     {
-        return $this->belongsTo(Pegawai::class, 'nip', 'nip');
+        return $this->belongsTo(Pegawai::class, 'id_pegawai', 'id');
     }
 }

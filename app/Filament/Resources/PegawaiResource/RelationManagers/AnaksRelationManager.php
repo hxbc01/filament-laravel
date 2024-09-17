@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\PegawaiResource\RelationManagers;
 
+use App\Models\Pegawai;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -16,20 +17,36 @@ class AnaksRelationManager extends RelationManager
 
     public function form(Form $form): Form
     {
+        $pegawai = Pegawai::find($this->ownerRecord->id_pegawai);
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama')
+                Forms\Components\TextInput::make('nama_anak')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\DatePicker::make('tanggal_lahir_anak')
+                    ->required(),
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'Anak Kandung' => 'Anak Kandung',
+                        'Anak Tiri' => 'Anak Tiri'
+                    ]),
+                Forms\Components\Select::make('nip')
+                    ->options(function (RelationManager $pegawai): array {
+                        return $pegawai->ownerRecord->stores()
+                        ->pluck('nip')
+                        ->toArray();
+                    }),
             ]);
     }
 
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('nama')
+            ->recordTitleAttribute('nama_anak')
             ->columns([
-                Tables\Columns\TextColumn::make('nama'),
+                Tables\Columns\TextColumn::make('nama_anak'),
+                Tables\Columns\TextColumn::make('tanggal_lahir_anak'),
+                Tables\Columns\TextColumn::make('status'),
             ])
             ->filters([
                 //

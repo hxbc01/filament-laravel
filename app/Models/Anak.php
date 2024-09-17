@@ -12,17 +12,18 @@ class Anak extends Model
 
     protected $table = 'anak';
     protected $primaryKey = 'id';
-    // public $timestamps = false;
+    public $timestamps = false;
     // protected $guarded = ['id'];
     protected $fillable = [
         'nip',
-        'nama',
-        'tgl_lhr',
-        'status'
+        'nama_anak',
+        'tanggal_lahir_anak',
+        'status',
+        'id_pegawai'
     ];
 
     public function pegawai(): BelongsTo
     {
-        return $this->belongsTo(Pegawai::class, 'nip', 'nip');
+        return $this->belongsTo(Pegawai::class, 'id_pegawai', 'id');
     }
 }
