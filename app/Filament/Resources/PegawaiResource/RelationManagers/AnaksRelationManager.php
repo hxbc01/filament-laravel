@@ -26,7 +26,7 @@ class AnaksRelationManager extends RelationManager
                 Forms\Components\TextInput::make('nip')
                     ->label('NIP Orang tua')
                     ->default(fn() => $this->getOwnerRecord()?->nip)
-                    ->disabled(),
+                    ->disabled()->dehydrated(),
                 Forms\Components\DatePicker::make('tanggal_lahir_anak')
                     ->required(),
                 Forms\Components\Select::make('status')
@@ -34,8 +34,6 @@ class AnaksRelationManager extends RelationManager
                         'Anak Kandung' => 'Anak Kandung',
                         'Anak Tiri' => 'Anak Tiri'
                     ]),
-                Forms\Components\Hidden::make('nip')
-                    ->default(fn() => $this->getOwnerRecord()?->nip),
             ]);
     }
 

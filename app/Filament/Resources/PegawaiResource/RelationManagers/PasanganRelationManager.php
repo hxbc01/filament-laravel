@@ -24,7 +24,7 @@ class PasanganRelationManager extends RelationManager
                 Forms\Components\TextInput::make('nip')
                     ->label('NIP Pasangan')
                     ->default(fn() => $this->getOwnerRecord()?->nip)
-                    ->disabled(),
+                    ->disabled()->dehydrated(),
                 Forms\Components\TextInput::make('tempat_lahir')
                     ->required()
                     ->maxLength(255),
@@ -40,8 +40,6 @@ class PasanganRelationManager extends RelationManager
                 Forms\Components\TextInput::make('karsi')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Hidden::make('nip')
-                    ->default(fn() => $this->getOwnerRecord()?->nip),
             ]);
     }
 
