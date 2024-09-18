@@ -104,16 +104,16 @@ class PegawaiResource extends Resource
                             $query->where('nip', 'like', "%{$nip}%")
                         );
                     }),
-                Filter::make('nama')
+                Filter::make('nama_pegawai')
                     ->label('Nama')
                     ->form([
-                        TextInput::make('nama')
+                        TextInput::make('nama_pegawai')
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query->when(
-                            $data['nama'],
-                            fn($query, $nama) =>
-                            $query->where('nama', 'like', "%{$nama}%")
+                            $data['nama_pegawai'],
+                            fn($query, $nama_pegawai) =>
+                            $query->where('nama_pegawai', 'like', "%{$nama_pegawai}%")
                         );
                     })
             ], FiltersLayout::AboveContent)

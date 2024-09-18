@@ -14,15 +14,19 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class AnaksRelationManager extends RelationManager
 {
     protected static string $relationship = 'anaks';
+    protected static ?string $recordTitleAttribute = 'nama_anak';
 
     public function form(Form $form): Form
     {
-        $pegawai = Pegawai::find($this->ownerRecord->id_pegawai);
         return $form
             ->schema([
                 Forms\Components\TextInput::make('nama_anak')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('nip')
+                    ->label('NIP Orang tua')
+                    ->default(fn() => $this->getOwnerRecord()?->nip)
+                    ->disabled(),
                 Forms\Components\DatePicker::make('tanggal_lahir_anak')
                     ->required(),
                 Forms\Components\Select::make('status')
@@ -30,13 +34,14 @@ class AnaksRelationManager extends RelationManager
                         'Anak Kandung' => 'Anak Kandung',
                         'Anak Tiri' => 'Anak Tiri'
                     ]),
-                Forms\Components\Select::make('nip')
-                    ->options(function (RelationManager $pegawai): array {
-                        return $pegawai->ownerRecord->stores()
-                        ->pluck('nip')
-                        ->toArray();
-                    }),
+                Forms\Components\Hidden::make('nip')
+                    ->default(fn() => $this->getOwnerRecord()?->nip),
             ]);
+    }
+
+    public function beforeSave(Form $form, $record)
+    {
+        $record->nip = $this->getOwnerRecord()->nip;
     }
 
     public function table(Table $table): Table

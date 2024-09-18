@@ -20,7 +20,9 @@ class Sutri extends Model
         'tempat_lahir',
         'tanggal_lahir',
         'status_pernikahan',
-        'id_pegawai'
+        'id_pegawai',
+        'tanggal_nikah',
+        'karsi',
     ];
 
     public function pegawai(): BelongsTo
