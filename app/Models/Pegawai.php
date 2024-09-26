@@ -53,4 +53,9 @@ class Pegawai extends Model
         return $this->hasOne(Sutri::class, 'id_pegawai', 'id');
     }
 
+    public function pendidikans(): HasMany
+    {
+        return $this->hasMany(Pendidikan::class, 'nip', 'nip');
+    }
+
 }
