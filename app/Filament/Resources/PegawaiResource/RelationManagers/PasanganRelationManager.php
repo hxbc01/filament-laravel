@@ -33,12 +33,12 @@ class PasanganRelationManager extends RelationManager
                 Forms\Components\DatePicker::make('tanggal_nikah')
                     ->required(),
                 Forms\Components\Select::make('status_pernikahan')
+                    ->required()
                     ->options([
                         'Cerai' => 'Cerai',
                         'Menikah' => 'Menikah'
                     ]),
                 Forms\Components\TextInput::make('karsi')
-                    ->required()
                     ->maxLength(255),
             ]);
     }
