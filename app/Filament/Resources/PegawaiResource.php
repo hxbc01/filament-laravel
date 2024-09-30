@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PegawaiResource\Pages;
 use App\Filament\Resources\PegawaiResource\RelationManagers;
 use App\Models\Pegawai;
+use App\Models\Golongan;
+use App\Models\Unitkerja;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -15,7 +17,6 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
-use Filament\Infolists\Infolist;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\Filter;
@@ -25,7 +26,7 @@ class PegawaiResource extends Resource
 {
     protected static ?string $model = Pegawai::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     public static function form(Form $form): Form
     {
@@ -59,20 +60,39 @@ class PegawaiResource extends Resource
                             DatePicker::make('tanggal_lahir')
                                 ->required()
                                 ->columnSpan(['md' => 2]),
+                            Select::make('jenis_kelamin')
+                                ->required()
+                                ->options([
+                                    'Laki - Laki' => 'Laki - Laki',
+                                    'Perempuan' => 'Perempuan'
+                                ]),
                         ]),
 
                     Grid::make(['sm' => 1, 'md' => 4]) // 3 columns grid
                         ->schema([
                             Select::make('agama')
+                                ->required()
                                 ->options([
                                     'ISLAM' => 'ISLAM',
                                     'KRISTEN' => 'KRISTEN',
                                     'KATHOLIK' => 'KATHOLIK',
                                     'HINDU' => 'HINDU',
                                     'BUDHA' => 'BUDHA',
-                                ])
+                                    'KHONGHUCU' => 'KHONGHUCU'
+                                ]),
+                            Select::make('id_unit_kerja')
+                                ->label('Unit Kerja')
+                                ->required()
+                                ->searchable()
+                                ->getSearchResultsUsing(fn(string $search): array => Unitkerja::where('unit_kerja', 'like', "%{$search}%")->limit(50)->pluck('unit_kerja', 'id')->toArray())
+                                ->getOptionLabelUsing(fn($value): ?string => Unitkerja::find($value)?->unit_kerja),
+                            Select::make('golongan')
+                                ->label('Golongan')
+                                ->options(Golongan::all()->pluck('golongan'))
+                                ->searchable()
                         ]),
                     Textarea::make('alamat')
+                        ->required()
 
                 ]),
             ]);
@@ -144,6 +164,7 @@ class PegawaiResource extends Resource
         return [
             'index' => Pages\ListPegawais::route('/'),
             'create' => Pages\CreatePegawai::route('/create'),
+            'view' => Pages\ViewPegawai::route('/{record}'),
             'edit' => Pages\EditPegawai::route('/{record}/edit'),
         ];
     }
