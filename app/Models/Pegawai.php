@@ -27,7 +27,7 @@ class Pegawai extends Model
         'gelar_depan',
         'gelar_belakang',
         'tempat_lahir',
-        'tanngal_lahir',
+        'tanggal_lahir',
         'golongan',
         'tmtgol',
         'jenjang_pegawai',
@@ -39,8 +39,9 @@ class Pegawai extends Model
         'tmtbup',
         'id_unit_kerja'
     ];
-    public function unitkerja(): BelongsTo {
-        return $this->belongsTo(Unitkerja::class, 'id_unit_kerja','id');
+    public function unitkerja(): BelongsTo
+    {
+        return $this->belongsTo(Unitkerja::class, 'id_unit_kerja', 'id');
     }
 
     public function anaks(): HasMany
@@ -56,6 +57,10 @@ class Pegawai extends Model
     public function pendidikans(): HasMany
     {
         return $this->hasMany(Pendidikan::class, 'nip', 'nip');
+    }
+
+    public function pensiun(): HasOne {
+        return $this->hasOne(Pensiun::class, 'nip', 'nip');
     }
 
 }
