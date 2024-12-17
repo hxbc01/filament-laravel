@@ -7,8 +7,10 @@ use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
 
 class PendidikansRelationManager extends RelationManager
 {
@@ -18,14 +20,14 @@ class PendidikansRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nip')
+                TextInput::make('nip')
                     ->label('NIP Orang tua')
                     ->default(fn() => $this->getOwnerRecord()?->nip)
                     ->disabled()->dehydrated(),
-                Forms\Components\TextInput::make('level')
+                TextInput::make('level')
                     ->label('Level')
                     ->maxLength(255),
-                Forms\Components\Select::make('jenjang')
+                Select::make('jenjang')
                     ->label('Jenjang')
                     ->options([
                         'Sekolah Dasar' => 'Sekolah Dasar',
@@ -42,15 +44,15 @@ class PendidikansRelationManager extends RelationManager
                         'S-2' => 'S-2',
                         'S-3/Doktor' => 'S-3/Doktor',
                     ]),
-                Forms\Components\TextInput::make('jurusan')
+                TextInput::make('jurusan')
                     ->label('Jurusan')
                     ->maxLength(255),
-                Forms\Components\DatePicker::make('tahun_lulus')
+                DatePicker::make('tahun_lulus')
                     ->label('Tanggal Lulus'),
-                Forms\Components\TextInput::make('no_ijazah')
+                TextInput::make('no_ijazah')
                     ->label('No Ijazah')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('instansi_pendidikan')
+                TextInput::make('instansi_pendidikan')
                     ->label('Instansi Pendidikan')
                     ->maxLength(255),
             ]);
@@ -61,6 +63,9 @@ class PendidikansRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('nip')
             ->columns([
+                TextColumn::make('number')->label('No.')->getStateUsing(function ($rowLoop, $livewire) {
+                    return $rowLoop->index + 1;
+                }),
                 Tables\Columns\TextColumn::make('nip'),
                 Tables\Columns\TextColumn::make('level'),
                 Tables\Columns\TextColumn::make('jenjang'),

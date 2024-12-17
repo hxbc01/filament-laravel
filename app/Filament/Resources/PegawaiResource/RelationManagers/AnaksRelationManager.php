@@ -2,14 +2,15 @@
 
 namespace App\Filament\Resources\PegawaiResource\RelationManagers;
 
-use App\Models\Pegawai;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
 
 class AnaksRelationManager extends RelationManager
 {
@@ -20,16 +21,16 @@ class AnaksRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama_anak')
+                TextInput::make('nama_anak')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('nip')
+                TextInput::make('nip')
                     ->label('NIP Orang tua')
                     ->default(fn() => $this->getOwnerRecord()?->nip)
                     ->disabled()->dehydrated(),
-                Forms\Components\DatePicker::make('tanggal_lahir_anak')
+                DatePicker::make('tanggal_lahir_anak')
                     ->required(),
-                Forms\Components\Select::make('status')
+                Select::make('status')
                     ->options([
                         'Anak Kandung' => 'Anak Kandung',
                         'Anak Tiri' => 'Anak Tiri'
@@ -47,9 +48,12 @@ class AnaksRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('nama_anak')
             ->columns([
-                Tables\Columns\TextColumn::make('nama_anak'),
-                Tables\Columns\TextColumn::make('tanggal_lahir_anak'),
-                Tables\Columns\TextColumn::make('status'),
+                TextColumn::make('number')->label('No.')->getStateUsing(function ($rowLoop, $livewire) {
+                    return $rowLoop->index + 1;
+                }),
+                TextColumn::make('nama_anak'),
+                TextColumn::make('tanggal_lahir_anak'),
+                TextColumn::make('status'),
             ])
             ->filters([
                 //

@@ -63,4 +63,14 @@ class Pegawai extends Model
         return $this->hasOne(Pensiun::class, 'nip', 'nip');
     }
 
+    public function jabatan(): HasMany
+    {
+        return $this->hasMany(Jabatan::class, 'nip', 'nip');
+    }
+
+    public function pangkat(): HasMany
+    {
+        return $this->hasMany(Pangkat::class, 'nip', 'nip');
+    }
+
 }

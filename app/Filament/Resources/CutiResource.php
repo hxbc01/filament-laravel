@@ -73,7 +73,7 @@ class CutiResource extends Resource
                             DatePicker::make('tanggal_usul')
                                 ->required(),
                         ]),
-                    Grid::make(['sm' => 1, 'md' => 3]) // 3 columns grid
+                    Grid::make(['sm' => 1, 'md' => 3]) 
                         ->schema([
                             DatePicker::make('mulai_tanggal')
                                 ->required(),

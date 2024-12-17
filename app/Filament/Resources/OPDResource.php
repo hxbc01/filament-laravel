@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\OPDResource\Pages;
-use App\Filament\Resources\OPDResource\RelationManagers;
 use App\Models\OPD;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -17,7 +16,6 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\Filter;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class OPDResource extends Resource
 {

@@ -13,20 +13,22 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Exports\PegawaiExporter;
+use Filament\Tables\Actions\ExportAction;
+
 
 class PegawaiResource extends Resource
 {
     protected static ?string $model = Pegawai::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
     protected static ?int $navigationSort = 1;
 
@@ -35,7 +37,7 @@ class PegawaiResource extends Resource
         return $form
             ->schema([
                 Section::make('Informasi Pegawai')->schema([
-                    Grid::make(['sm' => 1, 'md' => 4]) // 3 columns grid
+                    Grid::make(['sm' => 1, 'md' => 4])
                         ->schema([
                             TextInput::make('nip')
                                 ->required()
@@ -43,19 +45,19 @@ class PegawaiResource extends Resource
                                 ->disabled(fn($record) => $record !== null)
                         ]),
 
-                    Grid::make(['sm' => 1, 'md' => 4]) // 3 columns grid
+                    Grid::make(['sm' => 1, 'md' => 4])
                         ->schema([
                             TextInput::make('gelar_depan')
-                                ->columnSpan(['sm' => 1, 'md' => 1]), // Occupies 1 column
+                                ->columnSpan(['sm' => 1, 'md' => 1]),
 
                             TextInput::make('nama_pegawai')
                                 ->required()
-                                ->columnSpan(['sm' => 1, 'md' => 2]), // Occupies 2 columns
+                                ->columnSpan(['sm' => 1, 'md' => 2]),
 
                             TextInput::make('gelar_belakang')
-                                ->columnSpan(['sm' => 1, 'md' => 1]), // Occupies 1 column
+                                ->columnSpan(['sm' => 1, 'md' => 1]),
                         ]),
-                    Grid::make(['sm' => 1, 'md' => 4]) // 3 columns grid
+                    Grid::make(['sm' => 1, 'md' => 4])
                         ->schema([
                             TextInput::make('tempat_lahir')
                                 ->required()
@@ -80,7 +82,7 @@ class PegawaiResource extends Resource
                                 ]),
                         ]),
 
-                    Grid::make(['sm' => 1, 'md' => 4]) // 3 columns grid
+                    Grid::make(['sm' => 1, 'md' => 4])
                         ->schema([
                             Select::make('id_unit_kerja')
                                 ->label('Unit Kerja')
@@ -167,6 +169,12 @@ class PegawaiResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ])
+            ->headerActions([
+                ExportAction::make()
+                    ->exporter(PegawaiExporter::class)
+                    ->label('Export Data Pegawai')
+                    ->fileName('Data_Pegawai.xlsx'),
             ]);
     }
 
@@ -176,7 +184,9 @@ class PegawaiResource extends Resource
             RelationManagers\AnaksRelationManager::class,
             RelationManagers\PasanganRelationManager::class,
             RelationManagers\PendidikansRelationManager::class,
-            RelationManagers\PensiunRelationManager::class
+            RelationManagers\PensiunRelationManager::class,
+            RelationManagers\JabatanRelationManager::class,
+            RelationManagers\PangkatRelationManager::class
         ];
     }
 
@@ -192,5 +202,12 @@ class PegawaiResource extends Resource
     public static function getNavigationLabel(): string
     {
         return 'Data Pegawai';
+    }
+
+    public function getTableBulkActions()
+    {
+        return  [
+            ExportBulkAction::make()
+        ];
     }
 }

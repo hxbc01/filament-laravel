@@ -7,8 +7,10 @@ use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
 
 class PasanganRelationManager extends RelationManager
 {
@@ -18,27 +20,28 @@ class PasanganRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama_pasangan')
+                TextInput::make('nama_pasangan')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('nip')
+                TextInput::make('nip')
                     ->label('NIP Pasangan')
                     ->default(fn() => $this->getOwnerRecord()?->nip)
                     ->disabled()->dehydrated(),
-                Forms\Components\TextInput::make('tempat_lahir')
+                TextInput::make('tempat_lahir')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\DatePicker::make('tanggal_lahir')
+                DatePicker::make('tanggal_lahir')
                     ->required(),
-                Forms\Components\DatePicker::make('tanggal_nikah')
+                DatePicker::make('tanggal_nikah')
                     ->required(),
-                Forms\Components\Select::make('status_pernikahan')
+                Select::make('status_pernikahan')
                     ->required()
                     ->options([
                         'Cerai' => 'Cerai',
                         'Menikah' => 'Menikah'
                     ]),
-                Forms\Components\TextInput::make('karsi')
+                TextInput::make('karsi')
+                    ->required()
                     ->maxLength(255),
             ]);
     }
@@ -48,6 +51,9 @@ class PasanganRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('nama_pasangan')
             ->columns([
+                TextColumn::make('number')->label('No.')->getStateUsing(function ($rowLoop, $livewire) {
+                    return $rowLoop->index + 1;
+                }),
                 Tables\Columns\TextColumn::make('nama_pasangan'),
                 Tables\Columns\TextColumn::make('status_pernikahan'),
                 Tables\Columns\TextColumn::make('tanggal_nikah'),

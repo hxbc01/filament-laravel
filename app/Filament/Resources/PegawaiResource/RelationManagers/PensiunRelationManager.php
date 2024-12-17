@@ -7,8 +7,9 @@ use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
 
 class PensiunRelationManager extends RelationManager
 {
@@ -19,35 +20,35 @@ class PensiunRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nip')
+                TextInput::make('nip')
                     ->label('NIP Pegawai')
                     ->default(fn() => $this->getOwnerRecord()?->nip)
                     ->disabled()->dehydrated(),
-                Forms\Components\TextInput::make('nama')
+                TextInput::make('nama')
                     ->label('Nama Pegawai')
                     ->default(fn() => $this->getOwnerRecord()?->nama_pegawai)
                     ->disabled()->dehydrated(),
-                Forms\Components\TextInput::make('tmt')
+                TextInput::make('tmt')
                     ->label('TMT Pensiun')
                     ->default(fn() => $this->getOwnerRecord()?->tmt_bup)
                     ->disabled()->dehydrated(),
-                Forms\Components\TextInput::make('golongan_akhir')
+                TextInput::make('golongan_akhir')
                     ->label('Golongan')
                     ->default(fn() => $this->getOwnerRecord()?->golongan)
                     ->disabled()->dehydrated(),
-                Forms\Components\TextInput::make('jabatan_akhir')
+                TextInput::make('jabatan_akhir')
                     ->label('Jabatan')
                     ->default(fn() => $this->getOwnerRecord()?->jabatan)
                     ->disabled()->dehydrated(),
-                Forms\Components\TextInput::make('unit_kerja_akhir')
+                TextInput::make('unit_kerja_akhir')
                     ->label('Unit Kerja')
                     ->default(fn() => $this->getOwnerRecord()?->unitKerja?->unit_kerja)
                     ->disabled()->dehydrated(),
-                Forms\Components\TextInput::make('nober')
+                TextInput::make('nober')
                     ->label('No Arsip')
                     ->default(fn() => $this->getOwnerRecord()?->nober)
                     ->disabled()->dehydrated(),
-                Forms\Components\Select::make('jenis')
+                Select::make('jenis')
                     ->required()
                     ->options([
                         'BUP' => 'BUP',
@@ -63,6 +64,9 @@ class PensiunRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('nip')
             ->columns([
+                TextColumn::make('number')->label('No.')->getStateUsing(function ($rowLoop, $livewire) {
+                    return $rowLoop->index + 1;
+                }),
                 Tables\Columns\TextColumn::make('nip'),
                 Tables\Columns\TextColumn::make('nama'),
                 Tables\Columns\TextColumn::make('tmt'),
